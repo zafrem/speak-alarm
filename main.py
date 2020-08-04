@@ -17,7 +17,7 @@ if not os.path.exists(log_dir):
         os.makedirs(log_dir)
 LOG_FILENAME = './logs/log_{}.log'.format(current_file_name)
 
-logger = logging.getLogger('test') 
+logger = logging.getLogger('speak-alarm') 
 logger.setLevel(logging.DEBUG)
 
 file_handler = logging.handlers.TimedRotatingFileHandler(
