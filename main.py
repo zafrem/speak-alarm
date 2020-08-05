@@ -7,6 +7,7 @@ import datetime, time, schedule, os, logging
 import logging.handlers
 from datetime import timedelta
 from apscheduler.schedulers.background import BackgroundScheduler
+from aiy.board import Board, Led
 
 # Logger Setting
 current_dir = os.path.dirname(os.path.realpath(__file__))
@@ -17,7 +18,7 @@ if not os.path.exists(log_dir):
         os.makedirs(log_dir)
 LOG_FILENAME = './logs/log_{}.log'.format(current_file_name)
 
-logger = logging.getLogger('test') 
+logger = logging.getLogger('speak-alarm') 
 logger.setLevel(logging.DEBUG)
 
 file_handler = logging.handlers.TimedRotatingFileHandler(
@@ -92,7 +93,7 @@ def speaking_function():
         if datetime.datetime.now().timestamp() > int(schTime):
             continue
 
-        alarm_scheduler.add_job(gspeech._textToSpeech, trigger="date", 
+        alarm_scheduler.add_job(gspeech.textToSpeech, trigger="date", 
                 run_date=str(datetime.datetime.fromtimestamp(schTime)),
                 id=event['iCalUID'], args=(str_arg,))
         event_lists.append(event['iCalUID'])
@@ -130,7 +131,13 @@ if __name__ == "__main__":
     
     try:
         alarm_scheduler.start()
-        while True:
-            time.sleep(2)
+        with Board() as board:
+            while True:
+                #use Aiy 
+                board.button.wait_for_press()
+                board.led.state=Led.ON
+                board.button.wait_for_release()
+                board.led.state=Led.OFF
+                #FIXME
     except (KeyboardInterrupt, SystemExit):
         pass
