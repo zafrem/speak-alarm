@@ -1,4 +1,4 @@
-# Python Alarm speaking (with Google Calender)
+# Python Alarm speaking in AIYproject Voice kit (with Google Calender)
 I trying to read the alarm using a Google AIYproject Voice kit.   
 
 ## Purpose of this repository
